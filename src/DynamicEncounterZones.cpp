@@ -27,9 +27,30 @@ void DynamicEncounterZones::CacheEncounterZones()
 		logger::info("Looking at encounter zone {:X}", encounterZone->GetFormID());
 		if (auto location = encounterZone->data.location)
 		{
+			if (auto name = location->GetName())
+			{
+				logger::info("Has location {}", name);
+			}
+			else {
+				logger::info("Has location (unnamed)");
+			}
+
 			if (!encounterZone->data.flags.all(RE::ENCOUNTER_ZONE_DATA::Flag::kNeverResets))
 			{
-				locationToEncounterZoneMap.insert({ location, encounterZone });
+				auto it = locationToEncounterZoneMap.find(location);
+				if (it != locationToEncounterZoneMap.end()) {
+					auto conflictingEncounterZone = (*it).second;
+					logger::warn("Encounter zone {:X} conflicts with {:X}", encounterZone->GetFormID(), conflictingEncounterZone->GetFormID());
+					if (max(encounterZone->data.minLevel, encounterZone->data.maxLevel) > max(conflictingEncounterZone->data.minLevel, conflictingEncounterZone->data.maxLevel))
+					{
+						logger::info("Replacing encounter zone due to higher level");
+						locationToEncounterZoneMap.insert({ location, encounterZone });
+					}
+				}
+				else {
+					logger::info("Inserting encounter zone for location");
+					locationToEncounterZoneMap.insert({ location, encounterZone });
+				}
 			}
 			else {
 				logger::info("Had never resets flag, ignoring");
