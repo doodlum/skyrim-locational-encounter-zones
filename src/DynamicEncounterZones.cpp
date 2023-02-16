@@ -72,34 +72,17 @@ RE::BGSEncounterZone* DynamicEncounterZones::GetEncounterZone(RE::TESObjectREFR*
 			auto it = locationToEncounterZoneMap.find(location);
 			if (it != locationToEncounterZoneMap.end())
 			{
-				logger::info("Found encounter zone for location");
-				auto encounterZone = (*it).second;
-				if (!This->extraList.HasType<RE::ExtraEncounterZone>()) {
-					logger::info("Adding extra data");
-					if (const auto newEZ = new RE::ExtraEncounterZone(); newEZ) {
-						newEZ->zone = encounterZone;
-						This->extraList.Add(newEZ);
-						logger::info("Successfully added extra data");
-					}
-					else {
-						logger::error("Failed to add extra data");
-					}
-				}
-				logger::info("Returning new encounter zone");
-				return encounterZone;
+				logger::info("Found encounter zone for location, returning");
+				return (*it).second;
 			}
 			else {
 				logger::info("Could not find encounter zone for location");
 			}
 		}
-
 		else {
 			logger::info("Has no location");
 		}
+		logger::info("Returning nothing");
 	}
-	else {
-		logger::debug("Not an actor, ignoring");
-	}
-	logger::info("Returning nothing");
 	return nullptr;
 }
