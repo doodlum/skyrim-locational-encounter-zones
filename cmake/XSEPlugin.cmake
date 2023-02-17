@@ -130,8 +130,6 @@ target_include_directories(
 		${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-find_package(magic_enum CONFIG REQUIRED)
-
 target_link_libraries(
 ${PROJECT_NAME} 
 PUBLIC 

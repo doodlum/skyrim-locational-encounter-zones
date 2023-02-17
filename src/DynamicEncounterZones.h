@@ -22,7 +22,6 @@ public:
 	std::map<void*, RE::BGSEncounterZone*> locationToEncounterZoneMap;
 
 	void CacheEncounterZones();
-
 	RE::BGSEncounterZone* GetEncounterZone(RE::TESObjectREFR* This);
 
 private:
